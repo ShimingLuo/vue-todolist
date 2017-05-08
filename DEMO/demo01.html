@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-demo</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            padding: 10px 20px;
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <table class="table">
+        <tr>
+            <th class="text-right" @click="sortBy('id')">序号</th>
+            <th class="text-right" @click="sortBy('name')">书名</th>
+            <th class="text-right" @click="sortBy('author')">作者</th>
+            <th class="text-right" @click="sortBy('price')">价格</th>
+            <th class="text-right">操作</th>
+        </tr>
+        <tr v-for="(book, index) in books">
+            <td class="text-right">{{book.id}}</td>
+            <td class="text-right">{{book.name}}</td>
+            <td class="text-right">{{book.author}}</td>
+            <td class="text-right">{{book.price}}</td>
+            <td class="text-right">
+                <template v-if="book.id%2==0">
+                    <button type="button" class="btn btn-success" @click="delBook(index, book, $event)">删除</button>
+                </template>
+                <template v-else>
+                    <button type="button" class="btn btn-danger" @click="delBook(index, book, $event)">删除</button>
+                </template>
+            </td>
+        </tr>
+    </table>
+    <p>
+        price: {{sum}}
+    </p>
+    <div id="add-book">
+        <legend>添加书籍</legend>
+        <div class="form-group">
+            <label>书名</label>
+            <input type="text" class="form-control" v-model="book.name">
+        </div>
+        <div class="form-group">
+            <label>作者</label>
+            <input type="text" class="form-control" v-model="book.author">
+        </div>
+        <div class="form-group">
+            <label>价格</label>
+            <input type="text" class="form-control" v-model="book.price">
+        </div>
+        <button class="btn btn-primary btn-block" @click="addBook">添加</button>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/vue/2.3.2/vue.min.js"></script>
+<!--<script src="https://cdn.bootcss.com/vue/1.0.22-csp/vue.min.js"></script>-->
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            sortparam: '',
+            book: {
+                id: 0,
+                author: '',
+                name: '',
+                price: ''
+            },
+            books: [
+                {
+                    id: 1,
+                    author: '曹雪芹',
+                    name: '红楼梦',
+                    price: 32.0
+                }, {
+                    id: 2,
+                    author: '施耐庵',
+                    name: '水浒传',
+                    price: 30.0
+                }, {
+                    id: '3',
+                    author: '罗贯中',
+                    name: '三国演义',
+                    price: 24.0
+                }, {
+                    id: 4,
+                    author: '吴承恩',
+                    name: '西游记',
+                    price: 20.0
+                }
+            ]
+        },
+        methods: {
+            addBook: function () {
+                this.book.id = this.books.length + 1;
+                this.books.push(this.book);
+                this.book = '';
+            },
+            delBook: function (index, book, event) {
+                this.books.splice(demo01, 1);
+            },
+            sortBy: function (sortparam) {
+                this.sortparam = sortparam;
+            }
+        },
+        computed: {
+            sum: function () {
+                var result = 0;
+                for(var i=0; i<this.books.length; i++){
+                    result += Number(this.books[i].price);
+                }
+                return result;
+            }
+        }
+    });
+</script>
+</body>
+</html>
